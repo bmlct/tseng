@@ -1,4 +1,4 @@
-package org.blastradius.qa;
+package com.blastradius.qa.tseng;
 
 import static org.testng.Assert.assertTrue;
 import org.testng.annotations.Test;
