@@ -127,6 +127,7 @@ public class Globals {
 			description="Start a new Selenium client and open the site root")
 	public void initClient() {
 		s = new DefaultSelenium(seleniumServerHost, seleniumServerPort, browserString, siteUnderTest);
+		s.start();
 		s.open("");
 	}
 	
