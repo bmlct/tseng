@@ -31,22 +31,22 @@ public class Globals {
 	/** In-process Selenium Server (preferred), used unless external server is specified */
 	public static SeleniumServer internalServer;
 	
-	/** Hostname of Selenium Server */
+	/** Hostname of Selenium Server (selenium.server.hostname) */
 	public static String seleniumServerHost;
 	
-	/** Port on which Selenium Server is being run */
+	/** Port on which Selenium Server is being run (selenium.server.port) */
 	public static int seleniumServerPort;
 	
 	/** Selenium Driver responsible for controlling the browser */
 	public static Selenium s;
 
-	/** The path to the Root of the Site being tested */
+	/** The path to the Root of the Site being tested (selenium.site) */
 	public static String siteUnderTest = "http://localhost/";
 	
-	/** Browser string identifying test browser */
+	/** Browser string identifying test browser (selenium.browser) */
 	public static String browserString;
 	
-	// --- Parameter Initialization ---
+	// --- Parameter Initialization --- //
 	@BeforeSuite
 	@Parameters("selenium.server.hostname")
 	@Test(groups="selenium.variables",
@@ -88,7 +88,7 @@ public class Globals {
 		browserString = browser;
 	}
 	
-	// --- Client/Server setup --- //
+	// --- Selenium Server and Client setup --- //
 	@AfterGroups("selenium.variables")
 	@BeforeSuite
 	@Parameters("selenium.server.hostname")
@@ -121,7 +121,7 @@ public class Globals {
 	// --- Teardown methods --- //
 	@AfterSuite
 	@Test(groups="selenium.connection",
-			description="Disconnect the client")
+			description="Disconnect the Selenium driver")
 	public void teardownClient() {
 		if(s != null) {
 			s.close();
@@ -132,7 +132,7 @@ public class Globals {
 	@AfterSuite
 	@AfterMethod(dependsOnMethods="teardownClient")
 	@Test(groups="selenium.connection",
-			description="Shut down server if necessary")
+			description="Shut down local Selenium server if necessary")
 	public void teardownServer() {
 		if(internalServer != null) {
 			internalServer.stop();
