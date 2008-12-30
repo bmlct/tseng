@@ -14,6 +14,9 @@
  */
 package com.blastradius.qa.tseng;
 
+import static org.testng.Assert.assertTrue;
+
+import org.mortbay.jetty.Server;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 import org.testng.annotations.*;
@@ -31,35 +34,38 @@ public class Globals {
 	/** In-process Selenium Server (preferred), used unless external server is specified */
 	public static SeleniumServer internalServer;
 	
-	/** Hostname of Selenium Server (selenium.server.hostname) */
-	public static String seleniumServerHost;
-	
-	/** Port on which Selenium Server is being run (selenium.server.port) */
-	public static int seleniumServerPort;
-	
 	/** Selenium Driver responsible for controlling the browser */
 	public static Selenium s;
+	
+	/** Hostname of Selenium Server (selenium.server.hostname) */
+	private static final String DEFAULT_SELENIUM_SERVER_HOST = "localhost";
+	public static String seleniumServerHost = DEFAULT_SELENIUM_SERVER_HOST;
+	
+	/** Port on which Selenium Server is being run (selenium.server.port) */
+	private static final int DEFAULT_SELENIUM_SERVER_PORT = 4444;
+	private static final String DEFAULT_SELENIUM_SERVER_PORT_STRING = "4444";
+	public static int seleniumServerPort = DEFAULT_SELENIUM_SERVER_PORT;
 
 	/** The path to the Root of the Site being tested (selenium.site) */
-	public static String siteUnderTest = "http://localhost/";
+	private static final String DEFAULT_SITE_UNDER_TEST = "http://localhost";
+	public static String siteUnderTest = DEFAULT_SITE_UNDER_TEST;
 	
 	/** Browser string identifying test browser (selenium.browser) */
-	public static String browserString;
+	private static final String DEFAULT_BROWSER_STRING="*chrome";
+	public static String browserString = DEFAULT_BROWSER_STRING;
 	
 	// --- Parameter Initialization --- //
-	@BeforeSuite
 	@Parameters("selenium.server.hostname")
-	@Test(groups="selenium.variables",
-			description="Identify host that is running Selenium server (default=localhost)")
-	public void initServerHost(@Optional(value="localhost") String serverHost) {
+	@BeforeSuite(groups="selenium.variables",
+			description="Identify host that is running Selenium server")
+	public void initServerHost(@Optional(value=DEFAULT_SELENIUM_SERVER_HOST) String serverHost) {
 		seleniumServerHost = serverHost;
 	}
 	
-	@BeforeSuite
 	@Parameters("selenium.server.port")
-	@Test(groups="selenium.variables",
-			description="Identify port that Selenium server is listening on (default=4444)")
-	public void initServerPort(@Optional(value="4444") String serverPort) {
+	@BeforeSuite(groups="selenium.variables",
+			description="Identify port that Selenium server is listening on")
+	public void initServerPort(@Optional(value=DEFAULT_SELENIUM_SERVER_PORT_STRING) String serverPort) {
 		try {
 			int input = Integer.parseInt(serverPort, 10);
 			if(input <= 0 || input > Math.pow(2, 16)) {
@@ -72,46 +78,52 @@ public class Globals {
 		}
 	}
 	
-	@BeforeSuite
 	@Parameters("selenium.site")
-	@Test(groups="selenium.variables",
-			description="Identify site under test (default=http://localhost)")
-	public void initSiteUnderTest(@Optional(value="http://localhost") String site) {
+	@BeforeSuite(groups="selenium.variables",
+			description="Identify site under test")
+	public void initSiteUnderTest(@Optional(value=DEFAULT_SITE_UNDER_TEST) String site) {
 		siteUnderTest = site;
 	}
 	
-	@BeforeSuite
 	@Parameters("selenium.browser")
-	@Test(groups="selenium.variables",
-			description="Identify browser to use (default=*chrome)")
-	public void initBrowser(@Optional(value="*chrome") String browser) {
+	@BeforeSuite(groups="selenium.variables",
+			description="Identify browser to use")
+	public void initBrowser(@Optional(value=DEFAULT_BROWSER_STRING) String browser) {
 		browserString = browser;
 	}
 	
 	// --- Selenium Server and Client setup --- //
-	@AfterGroups("selenium.variables")
-	@BeforeSuite
-	@Parameters("selenium.server.hostname")
-	@Test(groups="selenium.connection",
+	@BeforeSuite(groups="selenium.connection",
+			dependsOnGroups="selenium.variables",
 			description="Set up the local Selenium server if a remote is not specified")
-	public void initServer(String host) {
-		if(host == null || host.equals("") || host.equalsIgnoreCase("localhost")) {
+	public void initServer() {
+		if(seleniumServerHost == null || seleniumServerHost.equals("") || seleniumServerHost.equalsIgnoreCase(DEFAULT_SELENIUM_SERVER_HOST)) {
 			try {
 				RemoteControlConfiguration config = new RemoteControlConfiguration();
 				config.setPort(seleniumServerPort);
 
 				internalServer = new SeleniumServer(config);
+				internalServer.start();
 				
-				// Wait for server startup
+				final long start = System.currentTimeMillis();
+				final long timeout = 60000; // 30 seconds
+				final long deadline = start + timeout;
+				
+				Server jetty = internalServer.getServer();
+				while(System.currentTimeMillis() < deadline && !jetty.isStarted()) {
+					try {
+						Thread.sleep(timeout);
+					} catch(InterruptedException e) { /* Swallowed */ }
+				}
+				assertTrue(jetty.isStarted(), "Private instance of Selenium Server must start within " + timeout + "ms");
 			} catch (Exception e) {
 				throw new RuntimeException("Failed to start Selenium Server", e);
 			}
 		}
 	}
 	
-	@AfterMethod(dependsOnMethods="initServer")
-	@BeforeSuite
-	@Test(groups="selenium.connection",
+	@BeforeSuite(groups="selenium.connection",
+			dependsOnMethods="initServer",
 			description="Start a new Selenium client and open the site root")
 	public void initClient() {
 		s = new DefaultSelenium(seleniumServerHost, seleniumServerPort, browserString, siteUnderTest);
@@ -119,8 +131,7 @@ public class Globals {
 	}
 	
 	// --- Teardown methods --- //
-	@AfterSuite
-	@Test(groups="selenium.connection",
+	@AfterSuite(groups="selenium.connection",
 			description="Disconnect the Selenium driver")
 	public void teardownClient() {
 		if(s != null) {
@@ -129,9 +140,8 @@ public class Globals {
 		}
 	}
 	
-	@AfterSuite
-	@AfterMethod(dependsOnMethods="teardownClient")
-	@Test(groups="selenium.connection",
+	@AfterSuite(groups="selenium.connection",
+			dependsOnMethods="teardownClient",
 			description="Shut down local Selenium server if necessary")
 	public void teardownServer() {
 		if(internalServer != null) {
