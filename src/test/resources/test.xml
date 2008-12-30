@@ -13,9 +13,8 @@
     </classes>
   </test>
   
-  <test name="Generic Tests">
+  <test name="Core Functionality">
     <classes>
-      <class name="com.blastradius.qa.tseng.AppTest" />
     </classes>
   </test>
 </suite>
