@@ -1,0 +1,21 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+ 
+<suite name="TSeNG Tests">
+  <parameter name="selenium.server.hostname" value="localhost" />
+  <parameter name="selenium.server.port" value="4444" />
+  <parameter name="selenium.site" value="http://localhost:4443" />
+  <parameter name="selenium.browser" value="*chrome" />
+  
+  <test name="00 Initialize Globals">
+    <classes>
+      <class name="com.blastradius.qa.tseng.TestGlobals" />
+      <class name="com.blastradius.qa.tseng.Globals" />
+    </classes>
+  </test>
+  
+  <test name="Generic Tests">
+    <classes>
+      <class name="com.blastradius.qa.tseng.AppTest" />
+    </classes>
+  </test>
+</suite>
