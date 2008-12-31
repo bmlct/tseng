@@ -1,0 +1,53 @@
+#summary Feature outline and proposed schedule
+#labels Phase-Requirements
+
+= Destination =
+
+TSeNG aims to provide a stable base for building large-scale automated regression tests with Selenium and TestNG. It is modeled after "[http://www.youtube.com/watch?v=hWQdCdH77NA Ringo]" as described at GTAC 2007. This must be well-documented, tested, and easy to deploy.
+
+= Schedule =
+
+== v0.1: Core ==
+This version focuses on providing a reusable Selenium/TestNG base. It is the boilerplate code involved in nearly every project that involves TestNG and Selenium. Even on its own, this functionality is a big win, as it means jumping straight to test writing and gives testers a common framework to work from.
+
+ETA: 2008-01-05
+
+=== Deliverables ===
+  * (done) Maven Project
+  * Example minimalist TestNG Suite providing variables to Selenium Globals class
+  * (done) JAR packaging for TSeNG
+  * Unit tests of core functionality (Selenium init, variable reading, usage of global Selenium object)
+  * Proof of concept for future Unit Tests (Add context to local Jetty server)
+
+== v0.2: UI Map ==
+The UI Map provides an abstraction for objects and hierarchies on the page, pulling page-dependent locators out of code and into XML resources. This lowers the barriers of entry to test maintenance and modification by allowing tests to become decoupled from page design.
+
+=== Deliverables ===
+  * UI Object Repository
+  * Programatically defined UI Objects
+  * UI Objects defined in XML UI Map
+  * Generic Read/Write interface
+  * UI Object XPath inheritance
+
+== v0.3: Structured Data Generation ==
+Automatic mapping of Data to UI Element parameters
+
+== v0.4: UI Object functions ==
+Complex UI Objects should provide a means for describing their functionality. For example, a complex Form could provide a Submit method that takes care of populating data and clicking the "Confirm" link along the way.
+
+This functionality must be usable from the UI Map, as the Java side already has access to any convenience methods that are designed.
+
+== v0.5: Decorators and Decorator Chaining ==
+Augmentation of the UI Map to allow augmentation of a UI Object's behavior. This is primarily useful for implementing load conditions and wait states. The common use case is for a field that is verified when the field loses focus -- The blur event can be called after contents have been typed in.
+
+== v0.6: Load Conditions ==
+For Ajax-heavy sites, it is necessary to determine if particular page components are loaded. This release augments the UI Map with checks for state.
+
+== v0.7: Paging ==
+Add support for uniformly accessing data that may be spread over multiple pages. This may be more appropriate as a post-1.0 feature.
+
+== Reporting ==
+Design of reporting functionality for better integration with Maven's Surefire reports. This may be more appropriate as an enhancement for Surefire, or for inclusion in a post-1.0 release.
+
+== v1.0: Launchworthy ==
+The 1.0 release constitutes full Ringo-like functionality, or at least a useful subset. It may be beneficial to declare 1.0 after UI Map and Read/Write abstraction, as this is the most useful feature set.
