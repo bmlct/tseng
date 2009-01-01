@@ -54,7 +54,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>src/test/resources/test.xml</suiteXmlFile>
+            <suiteXmlFile>${basedir}/src/test/resources/test.xml</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
       </plugin>
