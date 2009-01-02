@@ -1,5 +1,5 @@
 #summary Feature outline and proposed schedule
-#labels Phase-Requirements
+#labels Phase-Requirements,Featured
 
 = Destination =
 
@@ -14,10 +14,10 @@ ETA: 2008-01-05
 
 === Deliverables ===
   * (done) Maven Project
-  * Example minimalist TestNG Suite providing variables to Selenium Globals class
+  * (done) Example minimalist TestNG Suite providing variables to Selenium Globals class
   * (done) JAR packaging for TSeNG
-  * Unit tests of core functionality (Selenium init, variable reading, usage of global Selenium object)
-  * Proof of concept for future Unit Tests (Add context to local Jetty server)
+  * (done) Unit tests of core functionality (Selenium init, variable reading, usage of global Selenium object)
+  * (done) Proof of concept for future Unit Tests (Add context to local Jetty server)
 
 == v0.2: UI Map ==
 The UI Map provides an abstraction for objects and hierarchies on the page, pulling page-dependent locators out of code and into XML resources. This lowers the barriers of entry to test maintenance and modification by allowing tests to become decoupled from page design.
