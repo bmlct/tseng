@@ -15,6 +15,7 @@
   
   <test name="Core Functionality">
     <classes>
+    	<class name="com.blastradius.qa.tseng.CoreTests" />
     </classes>
   </test>
 </suite>
