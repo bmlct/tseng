@@ -15,25 +15,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.openqa.selenium.client-drivers</groupId>
-      <artifactId>selenium-java-client-driver</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openqa.selenium.server</groupId>
-      <artifactId>selenium-server</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>5.8</version>
-      <classifier>jdk15</classifier>
-    </dependency>
-  </dependencies>
   
   <scm>
     <connection>scm:svn:http://tseng.googlecode.com/svn/trunk/</connection>
@@ -45,6 +26,32 @@
     <system>Google Code Project Hosting</system>
     <url>http://code.google.com/p/tseng/issues/list</url>
   </issueManagement>
+  
+  <repositories>
+    <repository>
+      <id>SeleniumHQ</id>
+      <url>http://nexus.openqa.org/content/repositories/snapshots/</url>
+    </repository>
+  </repositories>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.seleniumhq.selenium.client-drivers</groupId>
+      <artifactId>selenium-java-client-driver</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.seleniumhq.selenium.server</groupId>
+      <artifactId>selenium-server</artifactId>
+      <version>1.0-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>5.8</version>
+      <classifier>jdk15</classifier>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>
