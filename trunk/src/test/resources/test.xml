@@ -16,6 +16,7 @@
   <test name="Core Functionality">
     <classes>
     	<class name="com.blastradius.qa.tseng.CoreTests" />
+    	<class name="com.blastradius.qa.tseng.ui.UIMapUsage" />
     </classes>
   </test>
 </suite>
