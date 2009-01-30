@@ -2,7 +2,7 @@
 #labels Phase-Design
 
 = Test Design with UI Map (prototype) =
-The 0.2 release will feature UI Map functionality, allowing for separation of structure and code. The following prototype is largely based upon the example above, but features more realistic XPath Locators that would genuinely clutter the code.
+The 0.2 release will feature UI Map functionality, allowing for separation of structure and code. The following prototype is largely based upon the example [TsengUsage#Test_Design here], but features more realistic XPath Locators that would genuinely clutter the code.
 
 {{{
 package com.example.tests
