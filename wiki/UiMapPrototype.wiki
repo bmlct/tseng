@@ -24,13 +24,13 @@ public class MyTestUiMap {
    public void basicLoginTest(@Optional(value="john.doe") String user, @Optional(value="12345") String pass) {
       s.open("/");
 
-      s.type(ui("login box").ui("username").getLocator(), user); // Static import of UImap.ui()
+      s.type(ui("login box").ui("username"), user); // Static import of UImap.ui()
 
       UIElement l = UIMap.ui("login box"); // Store the object, just for brevity
 
-      s.type(l.ui("password").getLocator(), pass);
+      s.type(l.ui("password"), pass);
       s.click(l.ui("login button"));
-      assertEquals(s.getText(l.ui("success text").getLocator()),
+      assertEquals(s.getText(l.ui("success text")),
             "Welcome, " + user,
             "User login failed, or welcome message not displayed");
    }
