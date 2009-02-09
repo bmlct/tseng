@@ -1,4 +1,4 @@
-/* Copyright 2008 Blast Radius
+/* Copyright 2008
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import com.thoughtworks.selenium.Selenium;
 /**
  * Manages and provides access to variables used throughout
  * the test, such as the Selenium object and browser string.
- *  
- * @author thomas.johson@blastradius.com
  */
 public class Globals {
 	/** In-process Selenium Server (preferred), used unless external server is specified */

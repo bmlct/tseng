@@ -1,4 +1,4 @@
-/* Copyright 2008 Blast Radius
+/* Copyright 2008
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import java.util.LinkedList;
  * Provides structural information about a UIElement's position in the display
  * hierarchy. This also provides a point for overriding of stock behavior or
  * manipulation of an element's apparent locator.
- * 
- * @author thomas.johnson@blastradius.com
  */
 public class UIElement {
 	private final UITemplate template;

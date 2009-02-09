@@ -16,8 +16,6 @@ package com.blastradius.qa.tseng.ui;
 
 /**
  * Covers creation and use of UI Elements from within the code. 
- * 
- * @author thomas.johnson@blastradius.com
  */
 public class HardCodedUIElements {
 
