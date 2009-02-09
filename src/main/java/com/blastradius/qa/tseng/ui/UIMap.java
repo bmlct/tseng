@@ -20,47 +20,17 @@ import java.util.Hashtable;
  * Manages the top-level UI Elements
  */
 public class UIMap {
-	private static Hashtable<String, UITemplate> uiMap = new Hashtable<String, UITemplate>();
+	private static Hashtable<String, UIObject> uimap = new Hashtable<String, UIObject>();
 	
-	/**
-	 * Retrieves a top-level object from the UI map.
-	 * @param name
-	 * @return
-	 */
-	public static UIElement ui(String name) {
-		return new UIElement(null, uiMap.get(name));
+	public static UIObject ui(String name) {
+		return get(name);
 	}
-	
-	/**
-	 * Adds a new object type to the UI Map, registering it with the given name.
-	 * 
-	 * @param name Name associated with the Template
-	 * @param template
-	 */
-	public static void registerTemplate(String name, UITemplate template) {
-		uiMap.put(name, template);
+
+	public static UIObject get(String name) {
+		return uimap.get(name);
 	}
-	
-	/**
-	 * Retrieves a raw UIElementTemplate from the UI map, typically for use
-	 * in building other templates.
-	 * 
-	 * This method should not to be confused with the ui method, which
-	 * returns a UIElement for more general use inside hierarchies.
-	 * 
-	 * @param name
-	 * @return UI Template corresponding to given name, or null if none is registered
-	 */
-	public static UITemplate getTemplate(String name) {
-		return uiMap.get(name);
-	}
-	
-	/**
-	 * Removes a UIElementTemplate from the UI map.
-	 * @param name
-	 * @return
-	 */
-	public static UITemplate removeTemplate(String name) {
-		return uiMap.remove(name);
+
+	public static UIObject put(String name, UIObject value) {
+		return uimap.put(name, value);
 	}
 }
