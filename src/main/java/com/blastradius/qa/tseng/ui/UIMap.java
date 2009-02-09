@@ -1,4 +1,4 @@
-/* Copyright 2008 Blast Radius
+/* Copyright 2008
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ import java.util.Hashtable;
 
 /**
  * Manages the top-level UI Elements
- * 
- * @author thomas.johnson@blastradius.com
  */
 public class UIMap {
 	private static Hashtable<String, UITemplate> uiMap = new Hashtable<String, UITemplate>();

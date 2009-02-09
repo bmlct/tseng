@@ -1,4 +1,4 @@
-/* Copyright 2008 Blast Radius
+/* Copyright 2008
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import org.testng.annotations.Test;
 
 /**
  * Programmatically creates and reads UI Object Templates. 
- * 
- * @author thomas.johnson@blastradius.com
  */
 public class UIMapUsage {
 	
