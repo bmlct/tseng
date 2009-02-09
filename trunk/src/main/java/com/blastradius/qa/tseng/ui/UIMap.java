@@ -36,7 +36,7 @@ public class UIMap {
 	/**
 	 * Adds a new object type to the UI Map, registering it with the given name.
 	 * 
-	 * @param name Name for the object
+	 * @param name Name associated with the Template
 	 * @param template
 	 */
 	public static void registerTemplate(String name, UITemplate template) {
@@ -51,7 +51,7 @@ public class UIMap {
 	 * returns a UIElement for more general use inside hierarchies.
 	 * 
 	 * @param name
-	 * @return
+	 * @return UI Template corresponding to given name, or null if none is registered
 	 */
 	public static UITemplate getTemplate(String name) {
 		return uiMap.get(name);

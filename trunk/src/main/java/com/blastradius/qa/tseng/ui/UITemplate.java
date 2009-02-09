@@ -42,6 +42,17 @@ public class UITemplate {
 	}
 	
 	/**
+	 * Clone constructor that creates a new object with the same children (shallow clone)
+	 * and a different locator.
+	 * @param original
+	 * @param locator
+	 */
+	public UITemplate(UITemplate original, String locator) {
+		this.locator = locator;
+		children.putAll(original.children);
+	}
+	
+	/**
 	 * Returns the named child object
 	 * @param name
 	 * @return
