@@ -25,71 +25,62 @@ import org.testng.annotations.Test;
  */
 public class UIMapUsage {
 	
-	@Test(description="Create and retrieve UITemplates",
-			groups="uitemplates")
+	@Test(description="Create and retrieve UIObjects",
+			groups="creation")
 	public void createAndRetrieveTemplates() {
-		UITemplate template = new UITemplate("//div[@name='test']");
-		UIMap.registerTemplate("testDiv", template);
+		UIObject root = new UIObject(null, "//div[@name='root']");
+		UIMap.put("root", root);
 		
-		UITemplate returned = UIMap.getTemplate("testDiv");
-		assertSame(returned, template,
+		UIObject returned = UIMap.get("root");
+		UIObject returnedByUI = UIMap.ui("root");
+		
+		assertSame(returned, root,
 				"UIMap.get should return same object that was added");
+		assertSame(returnedByUI, root,
+				"UIMap.ui should return same object that was added");
 		
-		UIElement div = UIMap.ui("testDiv");
-		UITemplate wrapped = div.getTemplate();
-		assertSame(wrapped, template,
-				"Element's referenced template should be same object unless changed");
-		
-		assertEquals(div.getLocator(), "//div[@name='test']",
+		assertEquals(root.getLocator(), "//div[@name='root']",
 				"Element and template should have same locator unless altered");
 	}
 	
-	@Test(description="Verifies that Nested templates are stored correctly",
-			groups="uitemplates",
+	@Test(description="Verifies that Nested objects are stored correctly",
+			groups="creation",
 			dependsOnMethods="createAndRetrieveTemplates")
 	public void createHierarchicalTemplates() {
-		UITemplate parent = UIMap.getTemplate("testDiv");
-		UITemplate c1 = new UITemplate("//span[@class='c1']");
-		UITemplate c11 = new UITemplate("//a[@id='c1link']");
-		UITemplate c2 = new UITemplate("//span[@class='c2']");
+		UIObject root = UIMap.get("root");
+		UIObject c1 = new UIObject(root, "//span[@class='c1']");
+		UIObject c1_1 = new UIObject(c1, "//a[@id='c1link']");
+		UIObject c2 = new UIObject(root, "//span[@class='c2']");
 		
-		parent.addChild("child1", c1);
-		c1.addChild("link", c11);
-		parent.addChild("child2", c2);
+		root.putChild("child1", c1);
+		c1.putChild("link", c1_1);
+		root.putChild("child2", c2);
 		
-		assertSame(parent.getChild("child1"), c1,
+		assertSame(root.getChild("child1"), c1,
 				"UIElementTempalte.ui(\"...\") should return the value originally stored in it");
-		assertSame(parent.getChild("child2"), c2,
+		assertSame(root.getChild("child2"), c2,
 				"UIElementTempate.ui(\"...\") should return the value originally stored in it");
 		
-		assertNull(parent.getChild("does not exist"),
+		assertNull(root.getChild("does not exist"),
 				"Attempting to retrieve a nonexistent UI Template should return null");
 	}
 	
-	@Test(description="Ensure that chaining of ui() calls returns the right objects",
-			groups="uielements",
-			dependsOnGroups="uitemplates",
-			dependsOnMethods="createHierarchicalTemplates")
-	public void simpleChaining() {
-		UIElement div = UIMap.ui("testDiv");
-		assertEquals(div.getLocator(), div.getTemplate().getLocator(),
-				"Locator Strings should be identical between the UIElement and the Referenced template");
+	@Test(description="Verifies that nonexistent children return nothing",
+			groups="creation",
+			dependsOnMethods="createAndRetrieveTemplates")
+	public void nonexistentChildrenAreNull() {
+		UIObject root = UIMap.get("root");
 		
-		UIElement c1 = UIMap.ui("testDiv").ui("child1");
-		assertEquals(c1.getLocator(), c1.getTemplate().getLocator(),
-				"Locator Strings should be identical between the UIElement and the Referenced template");
-		
-		UIElement c11 = UIMap.ui("testDiv").ui("child1").ui("link");
-		assertEquals(c11.getLocator(), c11.getTemplate().getLocator(),
-				"Locator Strings should be identical between the UIElement and the Referenced template");
+		assertNull(root.getChild("does not exist"),
+				"Attempting to retrieve a nonexistent UI Template should return null");
 	}
 	
 	@Test(description="Build effective locator from a deep child node",
-			groups="uielements",
-			dependsOnMethods="createHierarchicalTemplates")
+			groups="operations",
+			dependsOnGroups="creation")
 	public void buildEffectiveLocator() {
-		String[] actualPath = UIMap.ui("testDiv").ui("child1").ui("link").getLocatorPath();
-		String[] expectedPath = new String[] { "//div[@name='test']", "//span[@class='c1']", "//a[@id='c1link']" };
+		String[] actualPath = UIMap.ui("root").ui("child1").ui("link").getLocatorPath();
+		String[] expectedPath = new String[] { "//div[@name='root']", "//span[@class='c1']", "//a[@id='c1link']" };
 		
 		assertEquals(actualPath.length, expectedPath.length,
 				"Compound Locator for UIElement 3 levels deep should contain 3 components");
@@ -97,11 +88,69 @@ public class UIMapUsage {
 				"Compound Locator should contain all locators of itself and its parents in least-specific to most-specific order");
 	}
 	
-	@Test(description="Removes an object from a template, rendering it inaccessible to future calls",
-			dependsOnGroups="uitemplates")
-	public void removeTemplate() {
-		UITemplate tempTemplate = new UITemplate("//a[@id='temp']");
-		UIMap.getTemplate("testDiv").addChild("temp", tempTemplate);
+	@Test(description="Clone a hierarchy as a root node",
+			groups="operations",
+			dependsOnGroups="creation")
+	public void cloneTreeAsRootNode() {
+		UIObject root = UIMap.ui("root");
+		UIObject clone = root.clone(null, "//div[@name='clone']");
+		UIMap.put("clone", clone);
 		
+		UIObject link = UIMap.ui("root").ui("child1").ui("link");
+		UIObject linkClone = UIMap.ui("clone").ui("child1").ui("link");
+		
+		assertNotSame(linkClone, link,
+				"Deep-cloned objects should not be '=='");
+		
+		String[] linkPath = link.getLocatorPath();
+		String[] linkClonePath = linkClone.getLocatorPath();
+		
+		assertEquals(linkPath[0], "//div[@name='root']",
+				"Locator of original root must remain unchanged after clone");
+		
+		assertEquals(linkClonePath[0], "//div[@name='clone']",
+				"Locator of cloned root must be as originally specified");
+		
+		assertEquals(linkClonePath.length, linkPath.length,
+				"Path lengths of original and cloned objects should be the same");
+		
+		for(int i = 1; i < linkPath.length; i++) {
+			assertEquals(linkClonePath[i], linkPath[i],
+					"Locators of cloned children should remain unchanged");
+		}
+	}
+	
+	@Test(description="Clone a hierarchy as a child node",
+			groups="operations",
+			dependsOnGroups="creation")
+	public void cloneTreeAsChildNode() {
+		UIObject root = UIMap.ui("root");
+		UIObject cloneParent = new UIObject(null, "//div[@name='cloneParent']");
+		cloneParent.putChild("clone", root.clone(cloneParent, "//div[@name='clone']"));
+		
+		UIMap.put("cloneParent", cloneParent);
+		
+		UIObject link = UIMap.ui("root").ui("child1").ui("link");
+		UIObject linkClone = UIMap.ui("cloneParent").ui("clone").ui("child1").ui("link");
+		
+		assertNotSame(linkClone, link,
+				"Deep-cloned objects should not be '=='");
+		
+		String[] linkPath = link.getLocatorPath();
+		String[] linkClonePath = linkClone.getLocatorPath();
+		
+		assertEquals(linkPath[0], "//div[@name='root']",
+				"Locator of original root must remain unchanged after clone");
+		
+		assertEquals(linkClonePath[1], "//div[@name='clone']",
+				"Locator of cloned root must be as originally specified");
+		
+		assertEquals(linkClonePath.length, linkPath.length + 1,
+				"Path length of clone should be sum of original and depth of new parent");
+		
+		for(int i = 1; i < linkPath.length; i++) {
+			assertEquals(linkClonePath[i + 1], linkPath[i],
+					"Locators of cloned children should remain unchanged");
+		}
 	}
 }
