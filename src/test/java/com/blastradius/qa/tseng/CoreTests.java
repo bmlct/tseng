@@ -41,4 +41,11 @@ public class CoreTests {
 		s.open(CONTEXT_ROOT + "/index.html");
 		assertEquals(s.getTitle(), title, "Title should be '" + title + "'");
 	}
+	
+	@Test(description="Ensure that the given browser string can support cross-domain navigation")
+	public void navigateBetweenDomains() {
+		s.open("http://www.google.ca");
+		s.type("name=q", "hello");
+		s.open("http://www.yahoo.com");
+	}
 }

@@ -105,6 +105,5 @@ public class UIMapUsage {
 		UITemplate tempTemplate = new UITemplate("//a[@id='temp']");
 		UIMap.getTemplate("testDiv").addChild("temp", tempTemplate);
 		
-		
 	}
 }
