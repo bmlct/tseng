@@ -147,7 +147,7 @@ public void login(String user, String pass) {
 
 It is worth noting that the language presented here is extremely verbose, and borders on being ugly and unreadable. It almost wants to become a friendlier language (Groovy?) or a Java APT plugin. It is expected that this part of the UI Map functionality should be used sparingly, for cases in which it is extremely desirable for keeping logic out of the tests and supporting classes.
 
-= JavaScript Version =
+= Javascript Version =
 Given its highly flexible syntax and dynamic nature, JavaScript may be the language of choice for a futurey UI Map implementation. It allows for extremely succinct definitions of UI elements with minimal overhead required to implement inheritance.
 
 {{{
