@@ -22,8 +22,12 @@ import java.util.Hashtable;
 public class UIMap {
 	private static Hashtable<String, UIObject> uimap = new Hashtable<String, UIObject>();
 	
-	public static UIObject ui(String name) {
-		return get(name);
+	public static UIObject ui(String... path) {
+		UIObject out = get(path[0]);
+		for(int i = 1; i < path.length; i++) {
+			out = out.ui(path[i]);
+		}
+		return out;
 	}
 
 	public static UIObject get(String name) {

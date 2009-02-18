@@ -153,4 +153,12 @@ public class UIMapUsage {
 					"Locators of cloned children should remain unchanged");
 		}
 	}
+	
+	@Test(description = "Verify that VarArg functionality produces identical results as chaining")
+	public void varArgsChaining() {
+		UIObject o = UIMap.ui("root", "child1", "link");
+		UIObject link = UIMap.ui("root").ui("child1").ui("link");
+		
+		assertSame(o, link, "Chaining and Varargs for the same path should yield same object");
+	}
 }
