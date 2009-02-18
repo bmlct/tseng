@@ -146,3 +146,35 @@ public void login(String user, String pass) {
 }}}
 
 It is worth noting that the language presented here is extremely verbose, and borders on being ugly and unreadable. It almost wants to become a friendlier language (Groovy?) or a Java APT plugin. It is expected that this part of the UI Map functionality should be used sparingly, for cases in which it is extremely desirable for keeping logic out of the tests and supporting classes.
+
+= JavaScript Version =
+Given its highly flexible syntax and dynamic nature, JavaScript may be the language of choice for a futurey UI Map implementation. It allows for extremely succinct definitions of UI elements with minimal overhead required to implement inheritance.
+
+{{{
+var login = new UI({
+   locator: "...",
+   username: new UI(textfield, {locator: "..."}),
+   password: new UI(textfield, {locator: "..."}),
+   loginButton: new UI(button, {locator: "..."}),
+   login: function(user, pass) {
+      username.type(user);
+      password.type(user);
+      loginButton.click();
+   }
+});
+}}}
+
+It may be possible to further simplify this design by allowing the UI constructor to handle the details of creating new objects and reusing functionality:
+{{{
+var login = new UI({
+   locator: "...",
+   username: { type: textfield, locator: "..." },
+   password: { type: textfield, locator: "..." },
+   submit: { type: button, locator: "..." },
+   login: function(user, pass) {
+      username.type(user);
+      password.type(pass);
+      submit.click();
+   }
+});
+}}}
