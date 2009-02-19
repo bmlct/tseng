@@ -1,0 +1,48 @@
+<ui-map>
+  <ui name="foo" locator="xpath=//div[@name='foo']">
+    <!-- An optional/immutable description of the UI Element -->
+    <description>This is a generic UI element. It has a location and a name. For more information on these generic elements, see <a href="http://www.google.com">Google</a>!</description>
+    
+    <!-- Nesting support is the focus of release 0.2 -->
+    <elements>
+      <link name="bar" locator="//a[class='foolink']" />
+      <ui name="someWidget" locator="//span[class='myWidget" />
+    </elements>
+    
+    <!-- Action support is scheduled for 0.3+, allowing for specifications of various actions. No conditionals allowed. It is worth noting that the overall verbosity incurred by this type of action definition is excessive. -->
+    <actions>
+      <action name="doit">
+        <description>Do it! Do it NOW!</description>
+        <parameters>
+          <parameter name="argument" description="I came here for an argument" />
+        </parameters>
+        <procedure>
+          <do target="bar" action="click" />
+          <do target="someWidget" action="something">
+            <parameters><parameter name="arg" value="hello" /></parameters>
+            <decorators>
+              <decorator name="deco">
+                <parameters><parameter name="xyz" value="1/w" /></parameters>
+              </decorator>
+            </decorators>
+          </do>
+          
+          <call on="bar" action="click" />
+          
+          <!-- BSF Script support would be a nice post-1.0 feature -->
+          <script language="..." />
+        </procedure>
+      </action>
+      <action name="self-referenced">
+        <description>Calls another action defined in this object </description>
+        <procedure>
+          <do action="doit">
+            <parameters><parameter name="argument" value="sketch" /></parameters>
+          </do>
+        </procedure>
+      </action>
+    </actions>
+  </ui>
+
+  <foo name="reused-foo" locator="xpath=//div[@name='foo2']" />
+</ui-map>
