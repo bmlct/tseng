@@ -1,0 +1,24 @@
+<ui-map>
+	<ui name="simple-reused" locator="reused-locator">
+		<description>This UI Element will be reused by future UI Elements</description>
+		<components>
+			<ui name="re1" locator="re1-locator" />
+			<ui name="re2" locator="re2-locator" />
+		</components>
+	</ui>
+
+	<ui name="simple-root" locator="simple-root-locator">
+		<components>
+			<ui name="child1" locator="child1-locator" />
+			<ui name="child2" locator="child2-locator">
+				<components>
+					<ui name="child2_1" locator="child2_1-locator">
+						<components>
+							<simple-reused name="child2_1_1" locator="child2_1_1-locator" />
+						</components>
+					</ui>
+				</components>
+			</ui>
+		</components>
+	</ui>
+</ui-map>
