@@ -17,6 +17,7 @@
     <classes>
     	<class name="com.blastradius.qa.tseng.CoreTests" />
     	<class name="com.blastradius.qa.tseng.ui.UIMapUsage" />
+    	<class name="com.blastradius.qa.tseng.ui.UIMapFromFile" />
     </classes>
   </test>
 </suite>
